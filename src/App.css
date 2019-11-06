@@ -1,6 +1,6 @@
 .area {
-  width: 1920px;
-  height: 1080px;
+  width: 960px;
+  height: 540px;
   border: 15px solid;
   border-image-source: linear-gradient(0deg, #c24c4c, #9b1f1f);
   border-image-slice: 1;
