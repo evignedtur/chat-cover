@@ -5,7 +5,7 @@ import { Switch, Route, useParams, HashRouter } from "react-router-dom";
 const App: React.FC = () => {
   return (
     <HashRouter basename="/">
-      <div className="App">
+      <div className="App full-height">
         <Switch>
           <Route path="/:server/:nickname" children={<Out />} />
         </Switch>
@@ -18,7 +18,7 @@ function Out() {
   let { server, nickname } = useParams();
 
   return (
-    <div>
+    <div className="full-height">
       <div className="text">
         <span>
           {server} / {nickname}
