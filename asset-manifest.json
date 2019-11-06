@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/chat-cover/static/css/main.3fc84a98.chunk.css",
+    "main.js": "/chat-cover/static/js/main.7703a8e2.chunk.js",
+    "main.js.map": "/chat-cover/static/js/main.7703a8e2.chunk.js.map",
+    "runtime-main.js": "/chat-cover/static/js/runtime-main.6af51106.js",
+    "runtime-main.js.map": "/chat-cover/static/js/runtime-main.6af51106.js.map",
+    "static/js/2.ae444982.chunk.js": "/chat-cover/static/js/2.ae444982.chunk.js",
+    "static/js/2.ae444982.chunk.js.map": "/chat-cover/static/js/2.ae444982.chunk.js.map",
+    "index.html": "/chat-cover/index.html",
+    "precache-manifest.ee881d93692236bd7d3bbef64914862e.js": "/chat-cover/precache-manifest.ee881d93692236bd7d3bbef64914862e.js",
+    "service-worker.js": "/chat-cover/service-worker.js",
+    "static/css/main.3fc84a98.chunk.css.map": "/chat-cover/static/css/main.3fc84a98.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6af51106.js",
+    "static/js/2.ae444982.chunk.js",
+    "static/css/main.3fc84a98.chunk.css",
+    "static/js/main.7703a8e2.chunk.js"
+  ]
+}
