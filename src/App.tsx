@@ -1,21 +1,16 @@
 import React from "react";
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useParams
-} from "react-router-dom";
+import { Switch, Route, useParams, HashRouter } from "react-router-dom";
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <HashRouter basename="/">
       <div className="App">
         <Switch>
           <Route path="/:server/:nickname" children={<Out />} />
         </Switch>
       </div>
-    </Router>
+    </HashRouter>
   );
 };
 
@@ -25,7 +20,9 @@ function Out() {
   return (
     <div>
       <div className="text">
-        <span>{server} / {nickname}</span>
+        <span>
+          {server} / {nickname}
+        </span>
       </div>
 
       <div className="area" />
