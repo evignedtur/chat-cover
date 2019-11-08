@@ -13,7 +13,8 @@ interface Config {
 const Admin: React.FC = () => {
 	const URL = 'https://accounts.spotify.com/authorize';
 	const CLIENT_ID = '85595b738deb4f078eb60bf45c542d45';
-	const REDIRECT_URI = `http://localhost:3000/#/callback`;
+	const REDIRECT_URI = `${window.location.protocol+'//'+window.location.host+window.location.pathname}#/callback`;
+	console.log(REDIRECT_URI);
 	const SCOPES = 'user-read-currently-playing';
 
 	const { register, handleSubmit } = useForm();
