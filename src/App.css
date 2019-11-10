@@ -260,6 +260,10 @@ button.spotify,
 	transition: all 300ms linear;
 }
 
+.formgroup input[type='text']:disabled {
+	color: #ccc;
+}
+
 .formgroup input[type='text']:focus {
 	background-color: #ffffff;
 	border: 1px solid #aaaaaa;

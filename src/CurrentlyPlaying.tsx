@@ -1,96 +1,67 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import ScrollText from 'react-scroll-text';
-import { SpotifyCurrentlyPlayingResult } from './SpotifyCurrentlyPlayingResult';
-import { loadConfig, saveConfig } from './admin/admin';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useInterval } from './util';
+import { CurrentlyPlayingProps, SpotifyCurrentlyPlayingResult } from './models';
+import Axios, { AxiosResponse } from 'axios';
 
-interface CurrentlyPlaying {
-	width: number;
-}
+const CurrentlyPlaying: React.FC<CurrentlyPlayingProps> = props => {
+	const [service, setService] = useState<SpotifyCurrentlyPlayingResult>({
+		is_playing: false
+	});
+	const [token, setToken] = useState('');
 
-const CurrentlyPlaying: React.FC<CurrentlyPlaying> = props => {
-	const SpotifyService = () => {
-		const [isPlaying, setIsPlaying] = useState<SpotifyCurrentlyPlayingResult>();
+	useEffect(() => {
+		if (!token) {
+			Axios.get(`https://evig-nedtur.herokuapp.com/session/${props.token}`).then(result => {
+				setToken(result.data.SpotifyToken);
+			});
+		}
+	}, [props.token, token]);
 
-		useInterval(() => {
-			if (loadConfig().includeCurrentlyPlaying) {
-				setPlay(true);
-				Axios.get<SpotifyCurrentlyPlayingResult>('https://api.spotify.com/v1/me/player/currently-playing', {
-					headers: { Authorization: 'Bearer ' + localStorage.getItem('ACCESS_TOKEN') }
-				})
-					.then(response => {
-						if (!isPlaying) {
-							setIsPlaying(response.data);
-						} else if (response.data.item && isPlaying.item && response.data.item.name !== isPlaying.item.name) {
-							setIsPlaying(response.data);
-						}
-					})
-					.catch((error) => {
-						alert(error);
-						deleteSpotifyData();
-						saveConfig({
-							...loadConfig(),
-							includeCurrentlyPlaying: false
-						});
-					});
-			}
-		}, 5000);
-
-		return isPlaying;
+	const updateSong = (result: AxiosResponse<SpotifyCurrentlyPlayingResult>) => {
+		return (
+			service &&
+			((service.item && result.data && result.data.item && service.item.name !== result.data.item.name) ||
+				service.is_playing !== result.data.is_playing)
+		);
 	};
 
-	const [play, setPlay] = useState(loadConfig().includeCurrentlyPlaying);
-	const config = loadConfig();
-	const service = SpotifyService();
+	const GetSpotifyCurrentlyPlaying = async () => {
+		const result = await Axios.get<SpotifyCurrentlyPlayingResult>('https://api.spotify.com/v1/me/player/currently-playing', {
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		if (updateSong(result)) {
+			setService(result.data);
+		}
+	};
+
+	useInterval(() => {
+		GetSpotifyCurrentlyPlaying().catch(error => {
+			console.error(error);
+		});
+	}, 5000);
+
 	return (
 		<AnimatePresence>
-			{play &&
-				service &&
-				service.is_playing &&
-				config.includeCurrentlyPlaying && (
-					<motion.div
-						initial={{ translateY: '-100%' }}
-						animate={{ translateY: '0%' }}
-						exit={{ translateY: '-100%' }}
-						className="currently-playing"
-						style={{ width: `calc((100% - ${props.width}px) - 100px)` }}
-					>
-						<ScrollText>
-							{service.is_playing &&
-								service.item &&
-								service.item.name &&
-								service.item.artists &&
-								`${config.currentlyPlayingPrefix ? config.currentlyPlayingPrefix + ': ' : ''} ${service.item.artists
-									.map(artist => artist.name)
-									.join(', ')} - ${service.item.name}`}
-						</ScrollText>
-					</motion.div>
-				)}
+			{service && service.is_playing && (
+				<motion.div
+					initial={{ translateY: '-100%' }}
+					animate={{ translateY: '0%' }}
+					exit={{ translateY: '-100%' }}
+					className="currently-playing"
+					style={{ width: `calc((100% - ${props.width}px) - 100px)` }}
+				>
+					<ScrollText>
+						{service.is_playing &&
+							service.item &&
+							service.item.name &&
+							service.item.artists &&
+							`Curently playing: ${service.item.artists.map(artist => artist.name).join(', ')} - ${service.item.name}`}
+					</ScrollText>
+				</motion.div>
+			)}
 		</AnimatePresence>
-	);
-};
-
-const useInterval = (callback: any, delay: number) => {
-	const savedCallback = useRef(callback);
-	useEffect(
-		() => {
-			savedCallback.current = callback;
-		},
-		[callback]
-	);
-
-	useEffect(
-		() => {
-			function tick() {
-				savedCallback!.current();
-			}
-			if (delay !== null) {
-				let id = setInterval(tick, delay);
-				return () => clearInterval(id);
-			}
-		},
-		[delay]
 	);
 };
 

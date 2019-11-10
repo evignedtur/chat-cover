@@ -1,1 +1,1 @@
-declare module "react-scroll-text";
+declare module 'react-scroll-text';
