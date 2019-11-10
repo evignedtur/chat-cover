@@ -195,6 +195,13 @@ button.green:hover,
 	background: #a1e82c;
 }
 
+button.gray,
+.button.gray,
+button.gray:hover,
+.button.gray:hover {
+	background: lightgray;
+}
+
 button:hover,
 .button:hover {
 	background: rgba(255, 255, 255, 0.3);
@@ -240,6 +247,13 @@ button.spotify,
 .card button,
 .card .button {
 	margin-top: 20px;
+}
+
+.card button + button,
+.card .button + .button,
+.card button + .button,
+.card .button + button {
+	margin-left: 20px;
 }
 
 .formgroup {

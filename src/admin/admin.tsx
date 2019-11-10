@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useForm from 'react-hook-form';
-import { loadConfig, saveConfig } from '../util';
+import { resetConfig, loadConfig, saveConfig } from '../util';
 
 const Admin: React.FC = () => {
 	const REDIRECT_URI = `${window.location.protocol + '//' + window.location.host + window.location.pathname}#/spotify-token`;
@@ -9,9 +9,14 @@ const Admin: React.FC = () => {
 
 	const onSubmit = (data: any) => {
 		const includeCurrentlyPlaying = data.includeCurrentlyPlaying === 'true';
-		const fixedData = { ...data, includeCurrentlyPlaying };
+		const fixedData = { ...loadConfig(), ...data, includeCurrentlyPlaying };
 		setConfig(fixedData);
 		saveConfig(fixedData);
+	};
+
+	const reset = (event?: any) => {
+		resetConfig(event);
+		setConfig(loadConfig());
 	};
 
 	return (
@@ -63,7 +68,10 @@ const Admin: React.FC = () => {
 								)}
 							</div>
 							<button className="green" type="submit">
-								Lagre
+								Save
+							</button>
+							<button className="gray" onClick={reset}>
+								Reset config
 							</button>
 						</form>
 					</div>

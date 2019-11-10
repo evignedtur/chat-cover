@@ -37,9 +37,11 @@ const CurrentlyPlaying: React.FC<CurrentlyPlayingProps> = props => {
 	};
 
 	useInterval(() => {
-		GetSpotifyCurrentlyPlaying().catch(error => {
-			console.error(error);
-		});
+		if (token) {
+			GetSpotifyCurrentlyPlaying().catch(error => {
+				console.error(error);
+			});
+		}
 	}, 5000);
 
 	return (
@@ -57,18 +59,12 @@ const CurrentlyPlaying: React.FC<CurrentlyPlayingProps> = props => {
 							service.item &&
 							service.item.name &&
 							service.item.artists &&
-							`Curently playing: ${service.item.artists.map(artist => artist.name).join(', ')} - ${service.item.name}`}
+							`Currently playing: ${service.item.artists.map(artist => artist.name).join(', ')} - ${service.item.name}`}
 					</ScrollText>
 				</motion.div>
 			)}
 		</AnimatePresence>
 	);
-};
-
-export const deleteSpotifyData = () => {
-	localStorage.removeItem('ACCESS_TOKEN');
-	localStorage.removeItem('EXPIRES_IN');
-	localStorage.removeItem('TOKEN_TYPE');
 };
 
 export default CurrentlyPlaying;
