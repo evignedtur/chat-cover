@@ -19,6 +19,16 @@ const CurrentlyPlaying: React.FC<CurrentlyPlayingProps> = props => {
 		}
 	}, [props.token, token]);
 
+	useInterval(
+		() => {
+			Axios.get(`https://evig-nedtur.herokuapp.com/session/${props.token}`).then(result => {
+				setToken(result.data.SpotifyToken);
+			});
+		},
+		1000 * 60 * 3,
+		[props.token, token]
+	);
+
 	const updateSong = (result: AxiosResponse<SpotifyCurrentlyPlayingResult>) => {
 		return (
 			service &&
